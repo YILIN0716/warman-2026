@@ -1,25 +1,22 @@
-/*******************************************************************************
- * 文件：  main.cpp
- * 功能：  Warman 2026 主控程序
- * 硬件：  Arduino Mega 2560 + WM1 扩展板
- ******************************************************************************/
+/*
+ * File:        main.cpp
+ * Purpose:     Warman 2026 Main Control Program
+ * Hardware:    Arduino Mega 2560 + WM1 Shield
+ */
 
 #include <Arduino.h>
 #include <Servo.h>
 #include "WM1_pins.h"
 
 
-/* ============================================================
- *  可配置参数
- * ============================================================ */
-static const int   CFG_LOOP_DELAY_MS     = 100;  // 主循环刷新率（ms）
-static const int   CFG_SERVO_STOW_DEG    = 0;    // 初始收起角度（符合 400x400x400mm 尺寸限制）
-static const int   CFG_COLLECTION_TARGET = 3;    // 目标收集物资数量
+
+// Configurable Parameters
+static const int   CFG_LOOP_DELAY_MS     = 100;  // Main loop refresh rate (ms)
+static const int   CFG_SERVO_STOW_DEG    = 0;    // Initial stow angle (must fit within 400x400x400mm size limit)
+static const int   CFG_COLLECTION_TARGET = 3;    // Target number of rocks to collect
 
 
-/* ============================================================
- *  机器人状态机
- * ============================================================ */
+// Robot State Machine
 enum class RobotState {
     WAITING_FOR_START,
     GOTO_COLLECTION,
@@ -29,31 +26,28 @@ enum class RobotState {
     MISSION_COMPLETE
 };
 
-static RobotState g_robotState     = RobotState::WAITING_FOR_START;
-static int        g_collectedCount = 0;
+static RobotState g_robotState      = RobotState::WAITING_FOR_START;
+static int        g_collectedCount  = 0;
 
 
-/* ============================================================
- *  舵机对象
- * ============================================================ */
+
+// Servo Object
 static Servo g_servo;
 
 
-/* ============================================================
- *  函数声明
- * ============================================================ */
-// 初始化
+// Function Declarations
+// Initialisation
 void motorInit(void);
 void sensorInit(void);
 void sensorCalibrate(void);
 void servoInit(void);
 void motorStop(void);
 
-// 传感器读取
+// Sensor reading
 void readLineSensors(void);
 void readEncoderDistance(void);
 
-// 状态机动作
+// State machine actions
 bool isStartButtonPressed(void);
 void runLineFollowPID(void);
 void driveOdometryStraight(void);
@@ -64,13 +58,12 @@ bool isAtDropoffZone(void);
 void dropPayload(void);
 void exitDropoffOrShutdown(void);
 
-// 舵机
+// Servo
 void servoSetAngle(int targetAngleDeg);
 
 
-/* ============================================================
- *  setup
- * ============================================================ */
+
+// setup
 void setup()
 {
     Serial.begin(115200);
@@ -85,16 +78,14 @@ void setup()
 }
 
 
-/* ============================================================
- *  loop：感知 → 决策（状态机）→ 执行
- * ============================================================ */
+// loop: Sense → Decide (state machine) → Act
 void loop()
 {
-    // 感知
+    // Sense
     readLineSensors();
     readEncoderDistance();
 
-    // 状态机
+    // State machine
     switch (g_robotState)
     {
         case RobotState::WAITING_FOR_START:
@@ -118,7 +109,7 @@ void loop()
             break;
 
         case RobotState::GOTO_DROPOFF:
-            runNavigationWithObstacle();  // 含跷跷板等特殊地形处理
+            runNavigationWithObstacle();  // Includes special terrain handling (e.g. ramp)
             if (isAtDropoffZone())
             {
                 motorStop();
@@ -134,7 +125,7 @@ void loop()
         case RobotState::MISSION_COMPLETE:
             exitDropoffOrShutdown();
             motorStop();
-            while (true) {}  // 比赛结束，停止一切动作
+            while (true) {}  // Mission complete — halt all operations
             break;
     }
 
@@ -142,106 +133,102 @@ void loop()
 }
 
 
-/* ============================================================
- *  初始化
- * ============================================================ */
+
+// Function Definitions
 void motorInit(void)
 {
-    // TODO: 设置 M1~M4 PWM 和 DIR 引脚为输出模式
+    // TODO: Set M1~M4 PWM and DIR pins to OUTPUT mode
 }
 
 void sensorInit(void)
 {
-    // TODO: 初始化循迹传感器、编码器、超声波引脚
+    // TODO: Initialise line tracking sensors, encoders, and ultrasonic pins
 }
 
 void sensorCalibrate(void)
 {
-    // TODO: 如有需要，在此校准传感器基准值
+    // TODO: Calibrate sensor baseline values if required
 }
 
 void servoInit(void)
 {
     g_servo.attach(SERVO1);
-    g_servo.write(CFG_SERVO_STOW_DEG);  // 收起到初始位置
+    g_servo.write(CFG_SERVO_STOW_DEG);  // Move servo to initial stow position
     delay(500);
 }
 
 void motorStop(void)
 {
-    // TODO: 将所有电机 PWM 置 0
+    // TODO: Set all motor PWM outputs to 0
 }
 
 
-/* ============================================================
- *  传感器读取
- * ============================================================ */
+
+// Sensor Reading
 void readLineSensors(void)
 {
-    // TODO: 读取循迹传感器，更新全局传感器数据
+    // TODO: Read line tracking sensors and update global sensor data
 }
 
 void readEncoderDistance(void)
 {
-    // TODO: 读取编码器脉冲，更新里程计数据
+    // TODO: Read encoder pulses and update odometry data
 }
 
 
-/* ============================================================
- *  状态机动作
- * ============================================================ */
+
+// State Machine Actions
 bool isStartButtonPressed(void)
 {
-    // TODO: 检测启动按钮
+    // TODO: Detect start button press
     return false;
 }
 
 void runLineFollowPID(void)
 {
-    // TODO: PID 循迹控制，输出差速驱动
+    // TODO: PID line following control, output differential drive signals
 }
 
 void driveOdometryStraight(void)
 {
-    // TODO: 里程计直线行驶
+    // TODO: Drive straight using odometry
 }
 
 bool isAtCollectionZone(void)
 {
-    // TODO: 检测是否到达收集区（标记线或预定距离）
+    // TODO: Detect whether the robot has reached the collection zone (marker line or preset distance)
     return false;
 }
 
 void collectPayload(void)
 {
-    // TODO: 执行收集动作，完成后 g_collectedCount++
+    // TODO: Execute collection action, increment g_collectedCount on success
 }
 
 void runNavigationWithObstacle(void)
 {
-    // TODO: 导航前往投放区，处理跷跷板等特殊地形
+    // TODO: Navigate to dropoff zone, handle special terrain such as the ramp
 }
 
 bool isAtDropoffZone(void)
 {
-    // TODO: 检测是否到达投放区目标位置
+    // TODO: Detect whether the robot has reached the dropoff target position
     return false;
 }
 
 void dropPayload(void)
 {
-    // TODO: 执行投放动作
+    // TODO: Execute payload deposit action
 }
 
 void exitDropoffOrShutdown(void)
 {
-    // TODO: 撤离投放区或原地断电
+    // TODO: Retreat from dropoff zone or power down in place
 }
 
 
-/* ============================================================
- *  舵机控制
- * ============================================================ */
+
+ // Servo Control
 void servoSetAngle(int targetAngleDeg)
 {
     g_servo.write(targetAngleDeg);

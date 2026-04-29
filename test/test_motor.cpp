@@ -1,31 +1,27 @@
-/*******************************************************************************
- * 文件：  test_motor.cpp
- * 功能：  WM1 电机驱动测试 — M1 正反转速度斜坡
- * 硬件：  标准有刷直流减速电机接至 WM1 M1 输出口
- * 说明：  电机速度从 0 升至最大再降回 0，方向交替切换
- * 使用：  如需单独测试硬件，将本文件复制到 src/ 并移除 main.cpp
- ******************************************************************************/
+/*
+ * File:        test_motor.cpp
+ * Purpose:     WM1 motor driver test — M1 forward/reverse speed ramp
+ * Hardware:    Standard brushed DC geared motor connected to WM1 M1 output port
+ * Notes:       Motor speed ramps from 0 to maximum then back to 0, direction alternates
+ * Usage:       To test hardware standalone, copy this file to src/ and remove main.cpp
+ */
+
 
 #include <Arduino.h>
 #include "WM1_pins.h"
 
 
-/* ============================================================
- *  全局变量
- * ============================================================ */
-static int g_motorDuty = 0;  // PWM 占空比（0~255）
+ // Global Variables
+static int g_motorDutyCycle = 0;  // PWM duty cycle (0~255)
 
 
-/* ============================================================
- *  setup
- * ============================================================ */
 void setup()
 {
-    // 使用的引脚
+    // Pins in use
     pinMode(M1_PWM, OUTPUT);
     pinMode(M1_DIR, OUTPUT);
 
-    // 未使用引脚设为输出，避免浮空
+    // Unused pins set as OUTPUT to avoid floating state
     pinMode(M2_PWM, OUTPUT);
     pinMode(M2_DIR, OUTPUT);
     pinMode(M3_PWM, OUTPUT);
@@ -40,17 +36,17 @@ void setup()
 
 
 /* ============================================================
- *  loop：正转斜坡 → 反转斜坡
+ *  loop: forward ramp → reverse ramp
  * ============================================================ */
 void loop()
 {
-    // 正转
+    // Forward rotation
     digitalWrite(M1_DIR, HIGH);
-    for (g_motorDuty = 0;   g_motorDuty <= 255; g_motorDuty++) { analogWrite(M1_PWM, g_motorDuty); delay(4); }
-    for (g_motorDuty = 255; g_motorDuty >= 0;   g_motorDuty--) { analogWrite(M1_PWM, g_motorDuty); delay(4); }
+    for (g_motorDutyCycle = 0;   g_motorDutyCycle <= 255; g_motorDutyCycle++) { analogWrite(M1_PWM, g_motorDutyCycle); delay(4); }
+    for (g_motorDutyCycle = 255; g_motorDutyCycle >= 0;   g_motorDutyCycle--) { analogWrite(M1_PWM, g_motorDutyCycle); delay(4); }
 
-    // 反转
+    // Reverse rotation
     digitalWrite(M1_DIR, LOW);
-    for (g_motorDuty = 0;   g_motorDuty <= 255; g_motorDuty++) { analogWrite(M1_PWM, g_motorDuty); delay(4); }
-    for (g_motorDuty = 255; g_motorDuty >= 0;   g_motorDuty--) { analogWrite(M1_PWM, g_motorDuty); delay(4); }
+    for (g_motorDutyCycle = 0;   g_motorDutyCycle <= 255; g_motorDutyCycle++) { analogWrite(M1_PWM, g_motorDutyCycle); delay(4); }
+    for (g_motorDutyCycle = 255; g_motorDutyCycle >= 0;   g_motorDutyCycle--) { analogWrite(M1_PWM, g_motorDutyCycle); delay(4); }
 }
