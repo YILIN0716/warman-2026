@@ -10,7 +10,7 @@
 
 
 
-// Configurable Parameters
+// Configurable Parameters (CFG)
 static const int   CFG_LOOP_DELAY_MS     = 100;  // Main loop refresh rate (ms)
 static const int   CFG_SERVO_STOW_DEG    = 0;    // Initial stow angle (must fit within 400x400x400mm size limit)
 static const int   CFG_COLLECTION_TARGET = 3;    // Target number of rocks to collect
@@ -26,13 +26,12 @@ enum class RobotState {
     MISSION_COMPLETE
 };
 
-static RobotState g_robotState      = RobotState::WAITING_FOR_START;
-static int        g_collectedCount  = 0;
 
-
-
-// Servo Object
-static Servo g_servo;
+// Global Variables
+static RobotState global_robotState      = RobotState::WAITING_FOR_START;
+static int        global_collectedCount  = 0;
+static Servo      global_servo;
+static int        global_serialBaudRate  = 115200;
 
 
 // Function Declarations
@@ -66,7 +65,7 @@ void servoSetAngle(int targetAngleDeg);
 // setup
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(global_serialBaudRate);
 
     motorInit();
     sensorInit();
@@ -77,8 +76,14 @@ void setup()
     Serial.println("Warman 2026 Ready.");
 }
 
+/*
+    main loop: main robot algorithm
+    pesudo-code outline: 
+    
 
-// loop: Sense → Decide (state machine) → Act
+
+*/
+ 
 void loop()
 {
     // Sense
@@ -86,11 +91,11 @@ void loop()
     readEncoderDistance();
 
     // State machine
-    switch (g_robotState)
+    switch (global_robotState)
     {
         case RobotState::WAITING_FOR_START:
             if (isStartButtonPressed())
-                g_robotState = RobotState::GOTO_COLLECTION;
+                global_robotState = RobotState::GOTO_COLLECTION;
             break;
 
         case RobotState::GOTO_COLLECTION:
@@ -98,14 +103,14 @@ void loop()
             if (isAtCollectionZone())
             {
                 motorStop();
-                g_robotState = RobotState::EXECUTE_COLLECTION;
+                global_robotState = RobotState::EXECUTE_COLLECTION;
             }
             break;
 
         case RobotState::EXECUTE_COLLECTION:
             collectPayload();
-            if (g_collectedCount == CFG_COLLECTION_TARGET)
-                g_robotState = RobotState::GOTO_DROPOFF;
+            if (global_collectedCount == CFG_COLLECTION_TARGET)
+                global_robotState = RobotState::GOTO_DROPOFF;
             break;
 
         case RobotState::GOTO_DROPOFF:
@@ -113,13 +118,13 @@ void loop()
             if (isAtDropoffZone())
             {
                 motorStop();
-                g_robotState = RobotState::EXECUTE_DROPOFF;
+                global_robotState = RobotState::EXECUTE_DROPOFF;
             }
             break;
 
         case RobotState::EXECUTE_DROPOFF:
             dropPayload();
-            g_robotState = RobotState::MISSION_COMPLETE;
+            global_robotState = RobotState::MISSION_COMPLETE;
             break;
 
         case RobotState::MISSION_COMPLETE:
@@ -152,8 +157,8 @@ void sensorCalibrate(void)
 
 void servoInit(void)
 {
-    g_servo.attach(SERVO1);
-    g_servo.write(CFG_SERVO_STOW_DEG);  // Move servo to initial stow position
+    global_servo.attach(SERVO1);
+    global_servo.write(CFG_SERVO_STOW_DEG);  // Move servo to initial stow position
     delay(500);
 }
 
@@ -202,7 +207,7 @@ bool isAtCollectionZone(void)
 
 void collectPayload(void)
 {
-    // TODO: Execute collection action, increment g_collectedCount on success
+    // TODO: Execute collection action, increment global_collectedCount on success
 }
 
 void runNavigationWithObstacle(void)
@@ -231,5 +236,5 @@ void exitDropoffOrShutdown(void)
  // Servo Control
 void servoSetAngle(int targetAngleDeg)
 {
-    g_servo.write(targetAngleDeg);
+    global_servo.write(targetAngleDeg);
 }
