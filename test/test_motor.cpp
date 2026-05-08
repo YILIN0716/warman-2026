@@ -3,7 +3,6 @@
  * Purpose:     WM1 motor driver test — M1 forward/reverse speed ramp
  * Hardware:    Standard brushed DC geared motor connected to WM1 M1 output port
  * Notes:       Motor speed ramps from 0 to maximum then back to 0, direction alternates
- * Usage:       To test hardware standalone, copy this file to src/ and remove main.cpp
  */
 
 
