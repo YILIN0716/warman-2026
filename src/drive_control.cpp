@@ -17,7 +17,10 @@ int motorMaxSpeed;
 // initialization
 void motorInit(void)
 {
-    // TODO: Set M1 and M2 PWM and DIR pins to OUTPUT mode
+    pinMode(M1_PWM, OUTPUT);
+    pinMode(M1_DIR, OUTPUT);
+    pinMode(M2_PWM, OUTPUT);
+    pinMode(M2_DIR, OUTPUT);
 }
 
 // control functions

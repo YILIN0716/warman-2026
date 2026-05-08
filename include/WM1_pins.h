@@ -1,7 +1,6 @@
 /*
  * file：  WM1_pins.h
- * function：  WM1 扩展板 + Arduino Mega 2560 全部引脚定义
- * clarification：  所有硬件引脚只在此文件定义，其他文件只引用，不硬编码数字
+ * function：  WM1 + Arduino Mega 2560 
  */
 
 #pragma once        // Header guard to prevent multiple inclusions

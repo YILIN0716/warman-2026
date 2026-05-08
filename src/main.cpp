@@ -9,12 +9,12 @@
 #include <Arduino.h>
 #include "drive_control.h"
 #include "input_signals.h"
-#include "payload.h"
+#include "robotic_arm.h"
 
 
 // Configurable Parameters
 static const int CFG_LOOP_DELAY_MS     = 100;
-static const int CFG_COLLECTION_TARGET = 3;
+static const int CFG_COLLECTION_TARGET = 6;
 
 
 // Robot State Machine
@@ -38,9 +38,12 @@ void setup()
 {
     motorInit();
     sensorInit();
-    servoInit();
-    motorStop();
     sensorCalibrate();
+    armInit();
+    elevationInit();
+    hopperInit();
+    scoopInit();
+    motorStop();
 
     Serial.println("Warman 2026 Ready.");
 }

@@ -1,7 +1,10 @@
 #pragma once
 
 // Initialisation
-void servoInit(void);
+void armInit(void);
+void elevationInit(void);
+void hopperInit(void);
+void scoopInit(void);
 
 // Extension arm
 void armExtend(void);
@@ -9,7 +12,7 @@ void armRetract(void);
 
 // Elevation
 void elevationCollect(void);
-void elevationDrop(void);
+void elevationHold(void);
 void elevationStow(void);
 
 // Hopper door
