@@ -39,9 +39,9 @@ void setup()
     motorInit();
     sensorInit();
     sensorCalibrate();
-    armInit();
-    elevationInit();
-    hopperInit();
+    armExtendRetractInit();
+    armElevationInit();
+    hopperSwitchInit();
     scoopInit();
     motorStop();
 

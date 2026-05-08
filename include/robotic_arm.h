@@ -1,9 +1,9 @@
 #pragma once
 
 // Initialisation
-void armInit(void);
-void elevationInit(void);
-void hopperInit(void);
+void armExtendRetractInit(void);
+void armElevationInit(void);
+void hopperSwitchInit(void);
 void scoopInit(void);
 
 // Extension arm
