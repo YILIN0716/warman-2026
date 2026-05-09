@@ -6,7 +6,7 @@
 
  
 #include <Arduino.h>
-#include "WM1_pins.h"
+#include "Arduino_Pins.h"
 #include "drive_control.h"
 
 // configurable parameters
@@ -29,7 +29,7 @@ void motorStop(void)
     // TODO: Set M1 and M2 motor PWM outputs to 0
 }
 
-void motorDriveForward(int time)
+void motorDriveForward(void)
 {
     // TODO: Set M1 and M2 motor PWM outputs to drive the robot forward
 }

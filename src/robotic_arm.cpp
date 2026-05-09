@@ -9,7 +9,7 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include "WM1_pins.h"
+#include "Arduino_Pins.h"
 #include "robotic_arm.h"
 
 

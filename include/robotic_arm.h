@@ -21,9 +21,3 @@ void hopperClose(void);
 
 // Scoop
 void scoopCollect(void);
-void scoopStow(void);
-
-// High-level actions
-void collectPayload(void);
-void dropPayload(void);
-void exitDropoffOrShutdown(void);
