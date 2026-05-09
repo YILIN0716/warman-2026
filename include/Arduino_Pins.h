@@ -1,6 +1,6 @@
 /*
- * file：  WM1_pins.h
- * function：  WM1 + Arduino Mega 2560
+ * file：      WM1_pins.h
+ * function：  WM1 + Arduino Mega 2560 
  */
 
 #pragma once        // Header guard to prevent multiple inclusions
@@ -30,7 +30,3 @@
 // relay pins
 #define RELAY1      2
 #define RELAY2      4
-
-
-// button pins
-#define BTN_START   24

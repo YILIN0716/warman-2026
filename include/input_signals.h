@@ -2,11 +2,9 @@
 
 // Initialisation
 void sensorInit(void);
-void sensorCalibrate(void);
 
 // Sensor reading
-void readLineSensors(void);
-void readEncoderDistance(void);
+int readUltrasonicDist(void);
 
 // Button detection
-bool isStartButtonPressed(void);
+bool readStartButton(void);

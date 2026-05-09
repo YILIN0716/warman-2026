@@ -10,6 +10,7 @@
 #include "drive_control.h"
 #include "input_signals.h"
 #include "robotic_arm.h"
+#include "Arduino_Pins.h"
 
 
 // Configurable Parameters
@@ -38,34 +39,28 @@ void setup()
 {
     motorInit();
     sensorInit();
-    sensorCalibrate();
     armExtendRetractInit();
     armElevationInit();
     hopperSwitchInit();
     scoopInit();
-    motorStop();
-
-    Serial.println("Warman 2026 Ready.");
 }
 
 
 // Main control loop
 void loop()
 {
-    // Sense
-    readLineSensors();
-    readEncoderDistance();
+    // Sense inputs
+    int ultrasonicDistance = readUltrasonicDist();
 
     // State machine
     switch (global_robotState)
     {
         case RobotState::WAITING_FOR_START:
-            if (isStartButtonPressed())
+            if (readStartButton())
                 global_robotState = RobotState::GOTO_COLLECTION;
             break;
 
         case RobotState::GOTO_COLLECTION:
-            runLineFollowPID();
             if (isAtCollectionZone())
             {
                 motorStop();
@@ -78,7 +73,6 @@ void loop()
             break;
 
         case RobotState::GOTO_DROPOFF:
-            runNavigationWithObstacle();
             if (isAtDropoffZone())
             {
                 motorStop();
@@ -87,12 +81,10 @@ void loop()
             break;
 
         case RobotState::EXECUTE_DROPOFF:
-            dropPayload();
             global_robotState = RobotState::MISSION_COMPLETE;
             break;
 
         case RobotState::MISSION_COMPLETE:
-            exitDropoffOrShutdown();
             motorStop();
             while (true) {}
             break;
