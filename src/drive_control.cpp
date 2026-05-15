@@ -10,9 +10,7 @@
 #include "drive_control.h"
 
 // configurable parameters
-float wheelDiameter;
-int motorMaxSpeed;
-
+static int motorMaxSpeed = 255;
 
 // initialization
 void motorInit(void)
@@ -26,27 +24,47 @@ void motorInit(void)
 // control functions
 void motorStop(void)
 {
-    // TODO: Set M1 and M2 motor PWM outputs to 0
+    // Set M1 and M2 motor PWM outputs to 0
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, LOW);
+    analogWrite(M1_PWM, 0);
+    analogWrite(M2_PWM, 0);
 }
 
 void motorDriveForward(void)
 {
-    // TODO: Set M1 and M2 motor PWM outputs to drive the robot forward
+    // Set M1 and M2 motor PWM outputs to drive the robot forward
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, HIGH);
+    analogWrite(M1_PWM, motorMaxSpeed);
+    analogWrite(M2_PWM, motorMaxSpeed);
 }
 
 void motorDriveBackward(void)
 {   
-    // TODO: Set M1 and M2 motor PWM outputs to drive the robot backward
+    // Set M1 and M2 motor PWM outputs to drive the robot backward
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, LOW);
+    analogWrite(M1_PWM, motorMaxSpeed);
+    analogWrite(M2_PWM, motorMaxSpeed);
 }
 
 void motorTurnLeft(void)
 {
-    // TODO: Set M1 and M2 motor PWM outputs to turn the robot left
+    // Set M1 and M2 motor PWM outputs to turn the robot left
+    digitalWrite(M1_DIR, LOW);
+    digitalWrite(M2_DIR, HIGH);
+    analogWrite(M1_PWM, motorMaxSpeed);
+    analogWrite(M2_PWM, motorMaxSpeed);
 }
 
 void motorTurnRight(void)
 {   
-    // TODO: Set M1 and M2 motor PWM outputs to turn the robot right
+    // Set M1 and M2 motor PWM outputs to turn the robot right
+    digitalWrite(M1_DIR, HIGH);
+    digitalWrite(M2_DIR, LOW);
+    analogWrite(M1_PWM, motorMaxSpeed);
+    analogWrite(M2_PWM, motorMaxSpeed);
 }
 
 

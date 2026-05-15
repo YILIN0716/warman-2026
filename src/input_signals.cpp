@@ -5,7 +5,7 @@
 
 
 #include <Arduino.h>
-#include "WM1_pins.h"
+#include "Arduino_Pins.h"
 #include "input_signals.h"
 
 
