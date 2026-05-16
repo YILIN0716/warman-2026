@@ -1,7 +1,7 @@
-#pragma once
+#pragma once        // Header guard to prevent multiple inclusions
 
 // Initialisation
-void sensorInit(void);
+void inputSignalInit(void);
 
 // Sensor reading
 int readUltrasonicDist(void);

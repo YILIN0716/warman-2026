@@ -1,10 +1,4 @@
-/*
- * file：      WM1_pins.h
- * function：  WM1 + Arduino Mega 2560 
- */
-
 #pragma once        // Header guard to prevent multiple inclusions
-
 
 // ultrasonic sensor pins
 #define TRIG_PIN    22
@@ -36,4 +30,4 @@
 #define BTN_START    25      // pin25 -> button -> GND
 
 // led pin
-#define LED_PIN      24     
+#define LED_PIN      24      // pin24 -> Resistor 220Ω -> LED -> GND

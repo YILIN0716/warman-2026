@@ -39,7 +39,7 @@ static RobotState global_robotState = RobotState::WAITING_FOR_START;
 void setup()
 {
     motorInit();
-    sensorInit();
+    inputSignalInit();
     armExtendRetractInit();
     armElevationInit();
     hopperSwitchInit();
