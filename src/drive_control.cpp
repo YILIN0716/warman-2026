@@ -6,7 +6,7 @@
 
  
 #include <Arduino.h>
-#include "Arduino_Pins.h"
+#include "DEFINED_PINS.h"
 #include "drive_control.h"
 
 // configurable parameters

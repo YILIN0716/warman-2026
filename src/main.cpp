@@ -8,9 +8,9 @@
 // Include necessary libraries and headers
 #include <Arduino.h>
 #include "drive_control.h"
-#include "input_signals.h"
-#include "robotic_arm.h"
-#include "Arduino_Pins.h"
+#include "INPUT_SIGNAL.h"
+#include "ARM_CONTROL.h"
+#include "DEFINED_PINS.h"
 
 
 // Configurable Parameters
@@ -61,7 +61,7 @@ void loop()
             break;
 
         case RobotState::GOTO_COLLECTION:
-            if (isAtCollectionZone())
+
             {
                 motorStop();
                 global_robotState = RobotState::EXECUTE_COLLECTION;
@@ -69,11 +69,11 @@ void loop()
             break;
 
         case RobotState::EXECUTE_COLLECTION:
-            collectPayload();
+        // TODO: Implement collection logic using arm and hopper control functions, and transition to next state when collection is complete
+
             break;
 
         case RobotState::GOTO_DROPOFF:
-            if (isAtDropoffZone())
             {
                 motorStop();
                 global_robotState = RobotState::EXECUTE_DROPOFF;
@@ -85,7 +85,9 @@ void loop()
             break;
 
         case RobotState::MISSION_COMPLETE:
+        // set led to indicate completion, stop all motors, and halt program
             motorStop();
+            digitalWrite(LED_PIN, HIGH);  // Turn on completion LED
             while (true) {}
             break;
     }

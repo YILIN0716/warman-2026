@@ -5,26 +5,24 @@
 
 
 #include <Arduino.h>
-#include "Arduino_Pins.h"
-#include "input_signals.h"
+#include "DEFINED_PINS.h"
+#include "INPUT_SIGNAL.h"
 
 
 // initialization
 void sensorInit(void)
 {
-    pinMode(BTN_START, INPUT_PULLUP);
-    // TODO: Initialise line tracking sensors, encoders, and ultrasonic pins
+    // Initialise ultrasonic pins
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
 }
 
 
 // read input signals — returns true on a confirmed button press (active LOW with pull-up)
 bool readStartButton(void)
 {
-    if (digitalRead(BTN_START) == HIGH)
-        return false;
-
-    delay(20);  // debounce
-    return (digitalRead(BTN_START) == LOW);
+    // TODO： Read start button, only exit function when a valid button press is detected
+    
 }
 
 

@@ -9,8 +9,8 @@
 
 #include <Arduino.h>
 #include <Servo.h>
-#include "Arduino_Pins.h"
-#include "robotic_arm.h"
+#include "DEFINED_PINS.h"
+#include "ARM_CONTROL.h"
 
 
 // == Configurable Parameters ===============================================================
