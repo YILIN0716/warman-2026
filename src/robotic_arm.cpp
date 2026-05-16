@@ -23,7 +23,8 @@ static const int CFG_ARM_PWM          = 204;    // 80% of 255 to prevent overvol
 // Elevation — angle-based (servo)
 static const int CFG_ELEV_STOW_DEG    = 0;      // stow position is flat
 static const int CFG_ELEV_COLLECT_DEG = 15;     // collection position
-static const int CFG_ELEV_HOLD_DEG    = 90;     // holding position
+static const int CFG_ELEV_HOLD_DEG    = 45;     // holding position
+static const int CFG_ELEV_DROPOFF_DEG = 70;     // dropoff position
 
 // Hopper door — angle-based (servo)
 static const int CFG_HOPPER_CLOSED_DEG = 0;     // idle state
@@ -109,6 +110,11 @@ void elevationStow(void)
     delay(CFG_SERVO_SETTLE_TIME);
 }
 
+void elevationDropoff(void)
+{
+    g_servoElevation.write(CFG_ELEV_DROPOFF_DEG);
+    delay(CFG_SERVO_SETTLE_TIME);
+}
 
 // == Hopper Door =================================================================
 

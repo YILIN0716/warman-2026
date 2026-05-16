@@ -14,6 +14,7 @@ void armRetract(void);
 void elevationCollect(void);
 void elevationHold(void);
 void elevationStow(void);
+void elevationDropoff(void);
 
 // Hopper door
 void hopperOpen(void);

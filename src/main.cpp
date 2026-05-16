@@ -14,7 +14,7 @@
 
 
 // Configurable Parameters
-static const int CFG_LOOP_DELAY_MS     = 100;
+static const int CFG_LOOP_DELAY_MS = 100;
 
 
 // Robot State Machine
@@ -58,7 +58,8 @@ void loop()
     {
         case RobotState::WAITING_FOR_START:  
             {     
-                readStartButton();                                     // block until start button is pressed
+                readStartButton();   
+                elevationStow();                                  // block until start button is pressed
                 global_robotState = RobotState::GOTO_COLLECTION;       // update status     
                 break;
             }
@@ -75,7 +76,13 @@ void loop()
 
         case RobotState::EXECUTE_COLLECTION:
             {
-                // TODO: Implement collection logic using arm and hopper control functions, and transition to next state when collection is complete
+                // TODO: Implement collection logic using arm and hopper control functions
+                hopperClose();
+                elevationCollect();
+                armExtend();
+                scoopCollect();
+                armRetract();
+                elevationHold();
                 global_robotState = RobotState::GOTO_START;
                 break;
             }
@@ -91,18 +98,32 @@ void loop()
         case RobotState::UP_RAMP:
             {
                 // TODO： turn so it faces the ramp, then drive forward until it reaches the dropoff point
+                motorTurnLeft();
+                motorStop();
+                motorUpRamp();
+                motorStop();            // can introuduce incline PWM compensation 
                 global_robotState = RobotState::EXECUTE_DROPOFF;
                 break;  
             }   
             
         case RobotState::EXECUTE_DROPOFF:
-
-            global_robotState = RobotState::DOWN_RAMP;
-            break;
-
+            {
+                // TODO: Implement dropoff logic using arm and hopper control functions
+                elevationDropoff();
+                armExtend();
+                hopperOpen();
+                delay(3000);  // wait for contents to drop off
+                hopperClose();
+                armRetract();
+                elevationHold();
+                global_robotState = RobotState::DOWN_RAMP;
+                break;
+            }
         case RobotState::DOWN_RAMP:
             {
                 // TODO: drive down the ramp to start zone
+                motorDownRamp();
+                motorStop();
                 global_robotState = RobotState::GOTO_ENDZONE;
                 break;
             } 
@@ -110,6 +131,8 @@ void loop()
         case RobotState::GOTO_ENDZONE:
             {
                 // TODO: go to endzone
+                motorDriveEnd();
+                motorStop();
                 global_robotState = RobotState::MISSION_COMPLETE;
                 break;
             }
