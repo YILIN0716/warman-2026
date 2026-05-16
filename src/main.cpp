@@ -15,7 +15,6 @@
 
 // Configurable Parameters
 static const int CFG_LOOP_DELAY_MS     = 100;
-static const int CFG_COLLECTION_TARGET = 6;
 
 
 // Robot State Machine
@@ -23,8 +22,10 @@ enum class RobotState {
     WAITING_FOR_START,
     GOTO_COLLECTION,
     EXECUTE_COLLECTION,
-    GOTO_DROPOFF,
+    GOTO_START,
+    UP_RAMP,
     EXECUTE_DROPOFF,
+    DOWN_RAMP,
     GOTO_ENDZONE,
     MISSION_COMPLETE
 };
@@ -55,40 +56,69 @@ void loop()
     // State machine
     switch (global_robotState)
     {
-        case RobotState::WAITING_FOR_START:
-            if (readStartButton())
-                global_robotState = RobotState::GOTO_COLLECTION;
-            break;
+        case RobotState::WAITING_FOR_START:  
+            {     
+                readStartButton();                                     // block until start button is pressed
+                global_robotState = RobotState::GOTO_COLLECTION;       // update status     
+                break;
+            }
 
         case RobotState::GOTO_COLLECTION:
 
             {
                 motorStop();
+                motorDriveForward();
+                motorStop();
                 global_robotState = RobotState::EXECUTE_COLLECTION;
+                break;
             }
-            break;
 
         case RobotState::EXECUTE_COLLECTION:
-        // TODO: Implement collection logic using arm and hopper control functions, and transition to next state when collection is complete
-
-            break;
-
-        case RobotState::GOTO_DROPOFF:
+            {
+                // TODO: Implement collection logic using arm and hopper control functions, and transition to next state when collection is complete
+                global_robotState = RobotState::GOTO_START;
+                break;
+            }
+        case RobotState::GOTO_START:
             {
                 motorStop();
-                global_robotState = RobotState::EXECUTE_DROPOFF;
+                motorDriveBackward();
+                motorStop();
+                global_robotState = RobotState::UP_RAMP;
+                break;
             }
+
+        case RobotState::UP_RAMP:
+            {
+                // TODO： turn so it faces the ramp, then drive forward until it reaches the dropoff point
+                global_robotState = RobotState::EXECUTE_DROPOFF;
+                break;  
+            }   
+            
+        case RobotState::EXECUTE_DROPOFF:
+
+            global_robotState = RobotState::DOWN_RAMP;
             break;
 
-        case RobotState::EXECUTE_DROPOFF:
-            global_robotState = RobotState::MISSION_COMPLETE;
-            break;
+        case RobotState::DOWN_RAMP:
+            {
+                // TODO: drive down the ramp to start zone
+                global_robotState = RobotState::GOTO_ENDZONE;
+                break;
+            } 
+
+        case RobotState::GOTO_ENDZONE:
+            {
+                // TODO: go to endzone
+                global_robotState = RobotState::MISSION_COMPLETE;
+                break;
+            }
 
         case RobotState::MISSION_COMPLETE:
         // set led to indicate completion, stop all motors, and halt program
             motorStop();
             digitalWrite(LED_PIN, HIGH);  // Turn on completion LED
-            while (true) {}
+            while (true) {}               // Infinite loop to halt program
             break;
     }
 

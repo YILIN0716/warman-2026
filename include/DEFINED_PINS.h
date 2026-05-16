@@ -33,7 +33,7 @@
 
 
 // button pin
-#define BTN_START    24
+#define BTN_START    25      // pin25 -> button -> GND
 
 // led pin
-#define LED_PIN      25
+#define LED_PIN      24     
