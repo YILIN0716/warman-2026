@@ -16,9 +16,6 @@ static const int DEBOUNCE_DELAY_MS = 20;
 // initialization
 void inputSignalInit(void)
 {
-    // Initialise ultrasonic pins
-    pinMode(TRIG_PIN, OUTPUT);
-    pinMode(ECHO_PIN, INPUT);
     // Initialise start button pin with pull-up resistor
     pinMode(BTN_START, INPUT_PULLUP);
 }
@@ -41,9 +38,3 @@ bool readStartButton(void)
 }
 
 
-int readUltrasonicDist(void)
-{
-    // TODO: Read ultrasonic sensor and return distance in cm
-
-    return 0;
-}

@@ -5,9 +5,9 @@
  */
 
 
-// Include necessary libraries and headers
+// Includes
 #include <Arduino.h>
-#include "drive_control.h"
+#include "DRIVE_CONTROL.h"
 #include "INPUT_SIGNAL.h"
 #include "ARM_CONTROL.h"
 #include "DEFINED_PINS.h"
@@ -50,16 +50,13 @@ void setup()
 // Main control loop
 void loop()
 {
-    // Sense inputs
-    int ultrasonicDistance = readUltrasonicDist();
-
     // State machine
     switch (global_robotState)
     {
         case RobotState::WAITING_FOR_START:  
             {     
-                readStartButton();   
-                elevationStow();                                  // block until start button is pressed
+                // readStartButton();   // block until start button is pressed
+                elevationStow();                                  
                 global_robotState = RobotState::GOTO_COLLECTION;       // update status     
                 break;
             }
