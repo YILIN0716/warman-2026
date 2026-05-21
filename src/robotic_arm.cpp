@@ -3,7 +3,7 @@
  * Purpose:     control extension arm   - 6V DC motor - M3
  *              control angle of elevation - servo     - SERVO1
  *              control hopper door        - servo     - SERVO2
- *              control up and down of scoop - 6V DC motor - M4
+ *              control up and down of scoop - servo from mega
  * ==================================================================================================================
  */
 
@@ -31,17 +31,20 @@ static const int CFG_ELEV_DROPOFF_DEG = 70;     // dropoff position
 static const int CFG_HOPPER_CLOSED_DEG = 0;     // idle state
 static const int CFG_HOPPER_OPEN_DEG   = 180;   // open state
 
-// Scoop — time-based (6V DC motor, 80% PWM to prevent overvoltage)
-static const int CFG_SCOOP_OPERATE_TIME = 10000;    // pre determined, should depend on retract of arm
+// Scoop — angle-based (servo)
+static const int CFG_SCOOP_STOW_DEG    = 0;    // idle state
+static const int CFG_SCOOP_FINAL_DEG   = 120;  // final state
 
 // Timing
 static const int CFG_SERVO_SETTLE_TIME = 500;
-
+static const int CFG_SCOOP_ANGLE_VARIABLE = 1;  // 1 degree per step
+static const int CFG_SCOOP_TIME_VARIABLE = 100; // 100ms per step
 
 // == Servo Objects ===================================================================
 
 static Servo g_servoElevation;      // SERVO1 (pin 9)
 static Servo g_servoHopper;         // SERVO2 (pin 10)
+static Servo g_servoScoop;      // SERVO3 (pin 22)
 
 
 // == Initialisation ========================================================
@@ -67,8 +70,9 @@ void hopperSwitchInit(void)
 
 void scoopInit(void)
 {
-    pinMode(M4_PWM, OUTPUT);
-    pinMode(M4_DIR, OUTPUT);
+    g_servoScoop.attach(SERVO3);
+    g_servoScoop.write(CFG_SCOOP_STOW_DEG);
+    delay(CFG_SERVO_SETTLE_TIME);
 }
 
 
@@ -136,7 +140,14 @@ void hopperClose(void)
 
 void scoopCollect(void)
 {
-    // TODO: Set M4 motor PWM outputs to operate the scoop for collection
+    // Slowly move the scoop to the final position
+    for (int angle = CFG_SCOOP_STOW_DEG; angle <= CFG_SCOOP_FINAL_DEG; angle += CFG_SCOOP_ANGLE_VARIABLE) {
+        g_servoScoop.write(angle);
+        delay(CFG_SCOOP_TIME_VARIABLE); 
+    }
+    // ensure final position is reached
+    g_servoScoop.write(CFG_SCOOP_FINAL_DEG);
+    delay(CFG_SERVO_SETTLE_TIME);
 }
 
 

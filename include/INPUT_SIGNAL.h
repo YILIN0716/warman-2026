@@ -3,8 +3,6 @@
 // Initialisation
 void inputSignalInit(void);
 
-// Sensor reading
-int readUltrasonicDist(void);
 
 // Button detection
 bool readStartButton(void);
